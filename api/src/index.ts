@@ -111,9 +111,6 @@ app.get("/get-jobs", async (req, res) => {
 
   queryvalues.push(limit, (page - 1) * limit);
 
-  console.log(querytext);
-  console.log(queryvalues);
-
   const client = await pool.connect();
 
   let rows;
@@ -126,7 +123,6 @@ app.get("/get-jobs", async (req, res) => {
 
     rows = (await client.query(query)).rows;
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ success: false, error });
   } finally {
     client.release();
@@ -188,7 +184,6 @@ app.post("/refresh-jobs", async (req, res) => {
     client.release();
     res.status(200).json({ success: true });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, error });
   }
 });
@@ -198,5 +193,5 @@ app.all("*", (req, res) => {
 });
 
 app.listen(process.env.PORT || 9000, () =>
-  console.log(`app started at port ${process.env.PORT || 9000}`)
+  console.log(`app running on port ${process.env.PORT || 9000}`)
 );
