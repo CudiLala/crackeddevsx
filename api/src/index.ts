@@ -51,11 +51,11 @@ app.get("/get-jobs", async (req, res) => {
   let i = 1;
 
   if (min_salary_usd) {
-    querytext += `min_salary = $${i++} AND `;
+    querytext += `min_salary_usd > $${i++} AND `;
     queryvalues.push(min_salary_usd);
   }
   if (max_salary_usd) {
-    querytext += `max_salary = $${i++} AND `;
+    querytext += `max_salary_usd < $${i++} AND `;
     queryvalues.push(max_salary_usd);
   }
   if (job_type.length > 0) {
