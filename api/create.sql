@@ -1,6 +1,4 @@
-CREATE TYPE job_type AS ENUM (
-  'full_time', 'part_time', 'freelance', 'internship', 'co_founder', 'other'
-);
+
 
 CREATE TABLE jobs (
   job_id INT PRIMARY KEY,
