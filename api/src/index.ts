@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.CORS_ORIGIN || "" }));
 
-app.get("/get-jobs", async (req, res) => {
+app.get("/api/get-jobs", async (req, res) => {
   let q = req.query.q?.toString().trim() || "";
 
   let on = (
@@ -135,7 +135,7 @@ app.get("/get-jobs", async (req, res) => {
   res.status(200).json({ success: true, data: rows });
 });
 
-app.post("/refresh-jobs", async (req, res) => {
+app.post("/api/refresh-jobs", async (req, res) => {
   let page = 1;
   let jobs: any[];
 
