@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
+import cors from "cors";
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ const pool = new Pool();
 const app = express();
 
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 app.get("/get-jobs", async (req, res) => {
   let q = req.query.q?.toString().trim() || "";
@@ -37,11 +39,11 @@ app.get("/get-jobs", async (req, res) => {
     ].includes(e)
   );
 
-  let degree_required = req.query.degree_required?.toString().trim() || "false";
+  let degree_required = req.query.degree_required?.toString().trim();
 
   let sort_by = req.query.sort_by?.toString().trim() || "";
 
-  let limit = Number(req.query.limit?.toString().trim()) || 10;
+  let limit = Number(req.query.limit?.toString().trim()) || 1000;
 
   let page = Number(req.query.page?.toString().trim()) || 1;
 
@@ -62,9 +64,11 @@ app.get("/get-jobs", async (req, res) => {
     querytext += `job_type =  ANY ($${i++}) AND `;
     queryvalues.push(job_type);
   }
+  if (degree_required == "false") {
+    querytext += `degree_required = false AND `;
+  }
   if (degree_required == "true") {
-    querytext += `degree_required = $${i++} AND `;
-    queryvalues.push(degree_required);
+    querytext += `degree_required = true AND `;
   }
 
   if (q && on.length > 0) {
@@ -128,7 +132,7 @@ app.get("/get-jobs", async (req, res) => {
     client.release();
   }
 
-  res.status(200).json({ succes: true, data: rows });
+  res.status(200).json({ success: true, data: rows });
 });
 
 app.post("/refresh-jobs", async (req, res) => {
