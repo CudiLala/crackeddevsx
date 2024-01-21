@@ -10,7 +10,7 @@ const pool = new Pool();
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || "" }));
 
 app.get("/get-jobs", async (req, res) => {
   let q = req.query.q?.toString().trim() || "";
