@@ -5,6 +5,7 @@
 	import Sort from './sort.svelte';
 	import Job from './job.svelte';
 	import type { PageData } from './$types';
+	import { PUBLIC_API_URL } from '$env/static/public';
 
 	export let data: PageData;
 
@@ -45,7 +46,7 @@
 	}) {
 		if (!mounted) return;
 
-		let newUrl = new URL('http://localhost:9000/get-jobs');
+		let newUrl = new URL(`${PUBLIC_API_URL}/get-jobs`);
 		if (q) newUrl.searchParams.set('q', q);
 		if (on.length > 0) newUrl.searchParams.set('on', on.join(','));
 		if (job_type.length > 0) newUrl.searchParams.set('job_type', job_type.join(','));
