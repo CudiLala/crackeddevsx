@@ -193,7 +193,9 @@ app.post("/refresh-jobs", async (req, res) => {
 });
 
 app.all("*", (req, res) => {
-  res.status(404).json({ success: false, message: "Path not found" });
+  res
+    .status(404)
+    .json({ success: false, message: `path ${req.path} not found` });
 });
 
 app.listen(process.env.PORT || 9000, () =>
