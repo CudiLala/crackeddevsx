@@ -6,6 +6,7 @@
 	import Job from './job.svelte';
 	import type { PageData } from './$types';
 	import { PUBLIC_API_URL } from '$env/static/public';
+	import pageLoader from '$lib/stores/page-loader';
 
 	export let data: PageData;
 
@@ -21,7 +22,7 @@
 
 	let mounted = false;
 
-	let url = new URL('http://localhost:9000/get-jobs');
+	let url = new URL(`${PUBLIC_API_URL}/api/get-jobs`);
 
 	$: updateUrl({ q, on, job_type, degree_required, minSalary, maxSalary, sort_by });
 
@@ -46,7 +47,7 @@
 	}) {
 		if (!mounted) return;
 
-		let newUrl = new URL(`${PUBLIC_API_URL}/get-jobs`);
+		let newUrl = new URL(`${PUBLIC_API_URL}/api/get-jobs`);
 		if (q) newUrl.searchParams.set('q', q);
 		if (on.length > 0) newUrl.searchParams.set('on', on.join(','));
 		if (job_type.length > 0) newUrl.searchParams.set('job_type', job_type.join(','));
@@ -61,7 +62,11 @@
 	async function fetchJobs(url: URL) {
 		if (!mounted) return;
 
+		pageLoader.start();
+
 		let res = await (await fetch(url)).json();
+
+		pageLoader.stop();
 
 		jobs = res.data;
 	}
